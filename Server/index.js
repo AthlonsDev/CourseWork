@@ -2,34 +2,61 @@ const mongo = require('./mongoDBConnection')
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
+const cors = require('cors')
 
 //for post data
 app.use(bodyParser.json())
 const {format} = require('path')
 const {response} = require('express')
-const db = require('./mongoDBConnection')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.json())
+app.use(cors())
+
 
 app.get('/', function(req, res) {
-    res.send('Hello World')
+    
+    mongo.find(function(err, doc) {
+        if(err) {
+            console.error(err)
+        } else{
+            res.json(doc)
+        }
+    })
 
 })
+app.post('/', function(req, res) {
+    console.log(req.body);
+    res.json({ status: "ok" });
+});
 
 app.post('/addPlayer', function(req, res) {
+      console.log("ref", req.body)
+        let newPlayer = new Player(req.body)
+        newPlayer.save()
+        .then(item => {
+            req.status(200)
+        })
+        .catch(err => {
+            req.status(400)
+        })
+})
+
+app.post('/updatePlayer', async function(req, res) {
         let id = req.params.id;
-        console.log(req.body);
-        // res.send(id)
-        let updateStats = new mongo(req.body)
+        console.log(req.param.body);
+        res.send(id)
+        await newPLayer.save();
         mongo.findByIdAndUpdate(id,
             {
                 Player_Name: updateStats.Player_Name,
             },
-            // updateStats.save()
+            await newPLayer.save()
             )
-        res.send()
+        res.send(player)
+
+  
  
 })
 
