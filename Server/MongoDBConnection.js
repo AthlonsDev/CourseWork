@@ -5,6 +5,8 @@ mongoose.connect(mongoURI, {useUnifiedTopology: true,useNewUrlParser: true}).
 catch(error => handleError(error))
 const db = mongoose.connection
 
+
+
 db.on('error', function(err) {
     console.log(err)
 })
@@ -14,4 +16,4 @@ console.log('successfully connected' + mongoURI)
 
 })
 // module.exports = db;
-module.exports = cricketModel;
+module.exports = cricketModel;;

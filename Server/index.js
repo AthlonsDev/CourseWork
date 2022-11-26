@@ -1,8 +1,10 @@
 const mongo = require('./mongoDBConnection')
 const express = require('express')
 const bodyParser = require('body-parser')
+const crypto = require("crypto");
 const app = express()
 const cors = require('cors')
+
 
 //for post data
 app.use(bodyParser.json())
@@ -16,30 +18,50 @@ app.use(cors())
 
 
 app.get('/', function(req, res) {
-    
     mongo.find(function(err, doc) {
         if(err) {
             console.error(err)
         } else{
-            res.json(doc)
+            req.send()
         }
     })
 
 })
 app.post('/', function(req, res) {
+    const newPLayer = new mongo({_id: '334896431578987231265816', Player_Name: 'John'})
+    newPLayer.save(function(err, doc) {
+        if(err) 
+         console.error(err)
+         console.log("Saved " + doc)
+         res.status(200)
+
+    })
+
+
     console.log(req.body);
     res.json({ status: "ok" });
 });
 
-app.post('/addPlayer', function(req, res) {
+// creating a single document
+// const doc1 = new person_doc({ name: 'Jack',age:32,Gender:"Male",Salary:3456 }
+// );
+// // adding one document in the collection
+// doc1.save(function (err,doc)
+// {
+// if (err) return console.error(err);
+// console.log("saving single document",doc)
+// })
+
+app.post('/', function(req, res) {
+    
       console.log("ref", req.body)
-        let newPlayer = new Player(req.body)
+        let newPlayer = new mongo(req.body)
         newPlayer.save()
-        .then(item => {
-            req.status(200)
+        .then(res => {
+            res.status(200)
         })
         .catch(err => {
-            req.status(400)
+            // req.status(400).json(err)
         })
 })
 
@@ -47,6 +69,7 @@ app.post('/updatePlayer', async function(req, res) {
         let id = req.params.id;
         console.log(req.param.body);
         res.send(id)
+        let newPlayer = new mongo(req.body)
         await newPLayer.save();
         mongo.findByIdAndUpdate(id,
             {
