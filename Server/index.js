@@ -27,6 +27,9 @@ app.get('/', function(req, res) {
     })
 
 })
+// This has been done for testing purposes, this actually adds the data to the database
+// req won't work since we did not create the HTML for the page yet
+// at this stage we can only modify the database direcly like this.
 app.post('/', function(req, res) {
     const newPLayer = new mongo({_id: '334896431578987231265816', Player_Name: 'John'})
     newPLayer.save(function(err, doc) {
