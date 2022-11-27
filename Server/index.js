@@ -55,7 +55,7 @@ app.post('/', function(req, res) {
 // console.log("saving single document",doc)
 // })
 
-app.post('/', function(req, res) {
+app.post('/addplayer', function(req, res) {
     
       console.log("ref", req.body)
         let newPlayer = new mongo(req.body)
@@ -68,7 +68,7 @@ app.post('/', function(req, res) {
         })
 })
 
-app.post('/updatePlayer', async function(req, res) {
+app.post('/updateplayer', async function(req, res) {
         let id = req.params.id;
         console.log(req.param.body);
         res.send(id)
@@ -85,13 +85,6 @@ app.post('/updatePlayer', async function(req, res) {
   
  
 })
-
-app.post('/hello', (req, res)=>{
-    console.log(req.body);
-    name.push(req.body.name) // add this if you store in array 
-  
-    return res.send(`hello ${req.body.name}`);
-  })
 
 app.post('/deletedoc/:id',function(req, res) {
     let id = req.params.id;
