@@ -22,7 +22,7 @@ app.get('/', function(req, res) {
         if(err) {
             console.error(err)
         } else{
-            req.send()
+            res.send(doc)
         }
     })
 
@@ -39,21 +39,9 @@ app.post('/', function(req, res) {
          res.status(200)
 
     })
-
-
     console.log(req.body);
     res.json({ status: "ok" });
 });
-
-// creating a single document
-// const doc1 = new person_doc({ name: 'Jack',age:32,Gender:"Male",Salary:3456 }
-// );
-// // adding one document in the collection
-// doc1.save(function (err,doc)
-// {
-// if (err) return console.error(err);
-// console.log("saving single document",doc)
-// })
 
 app.post('/addplayer', function(req, res) {
     
@@ -101,7 +89,7 @@ app.post('/deletedoc/:id',function(req, res) {
     )
    
    });
-
+// Remind to start server command => npm start
 app.listen(3000, () => {
     console.log('Listening on port 3000')
 
