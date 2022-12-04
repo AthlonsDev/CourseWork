@@ -1,96 +1,98 @@
 const mongo = require('./mongoDBConnection')
-const express = require('express')
-const bodyParser = require('body-parser')
-const crypto = require("crypto");
-const app = express()
+let model = require('./CricketSchema')
+var express = require('express')
+var bodyParser = require('body-parser')
+var app = express()
 const cors = require('cors')
 
-
 //for post data
-app.use(bodyParser.json())
-const {format} = require('path')
-const {response} = require('express')
+// const {format} = require('path')
+// const {response} = require('express')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
-app.use(express.json())
 app.use(cors())
 
 
-app.get('/', function(req, res) {
-    mongo.find(function(err, doc) {
+app.get('/display', function(req, res) {
+    console.log("Getting Data")
+    model.find(function(err, doc) {
         if(err) {
             console.error(err)
         } else{
-            res.send(doc)
+            console.log(doc)
+            const myJSON = JSON.stringify(doc);
+            res.json(doc)
         }
     })
 
 })
-// This has been done for testing purposes, this actually adds the data to the database
-// req won't work since we did not create the HTML for the page yet
-// at this stage we can only modify the database direcly like this.
-app.post('/', function(req, res) {
-    const newPLayer = new mongo({_id: '334896431578987231265816', Player_Name: 'John'})
-    newPLayer.save(function(err, doc) {
-        if(err) 
-         console.error(err)
-         console.log("Saved " + doc)
-         res.status(200)
-
-    })
-    console.log(req.body);
-    res.json({ status: "ok" });
-});
 
 app.post('/addplayer', function(req, res) {
     
-      console.log("ref", req.body)
-        let newPlayer = new mongo(req.body)
-        newPlayer.save()
-        .then(res => {
-            res.status(200)
-        })
-        .catch(err => {
-            // req.status(400).json(err)
+      console.log("req body", req.body)
+        let newPlayer = new model(req.body)
+        console.log("newPlayer", newPlayer)
+        newPlayer.save(function(err, doc) {
+            if(err) 
+             console.error("Nothing Saved" + err)
+
+             console.log("Document Saved")
+             res.status(200)
+    
         })
 })
 
-app.post('/updateplayer', async function(req, res) {
+app.get('/getplayer/:id',function(req, res) {
+    var id = req.params.id;
+    model.findById(id, function(err, doc) {
+        if(err) 
+         console.error("Nothing Found" + err)
+
+         console.log("Document Found " + doc)
+         
+         res.json(doc)
+        //  res.status(200)
+
+    })
+});
+   
+
+app.post('/updateplayer/:id', function(req, res) {
         let id = req.params.id;
-        console.log(req.param.body);
-        res.send(id)
-        let newPlayer = new mongo(req.body)
-        await newPLayer.save();
-        mongo.findByIdAndUpdate(id,
-            {
-                Player_Name: updateStats.Player_Name,
-            },
-            await newPLayer.save()
-            )
-        res.send(player)
-
-  
- 
+        let updatePlayer = new model(req.body)
+        model.findByIdAndUpdate(id, {
+            Player_Name: updatePlayer.Player_Name,
+            Matches: updatePlayer.Matches,
+            Inns: updatePlayer.Inns,
+            Runs: updatePlayer.Runs,
+            HS: updatePlayer.HS,
+            Ave: updatePlayer.Ave,
+        },
+        function(err, doc) {
+            if (err) { console.error(err) }
+            else { res.status(200).json(doc) }
+        }
+        )
 })
 
-app.post('/deletedoc/:id',function(req, res) {
+app.post('/deleteplayer/:id',function(req, res) {
     let id = req.params.id;
-   console.log(id)
-    console.log("deleting")
-    Books.findByIdAndDelete(id,function (err, docs) {
-    if (err){
-    console.log(err)
+    console.log("Method called")
+        model.findByIdAndDelete(id,function (err, doc) {
+            if (err){
+                console.log(err)
+            }
+            else{
+                // res.status(200)
+                res.send(doc.Player_Name + ' Deleted');
+            }
     }
-    else{
-    res.status(200).send('player Deleted');
-    }
-    }
-    )
+)
    
    });
 // Remind to start server command => npm start
-app.listen(3000, () => {
-    console.log('Listening on port 3000')
+app.listen(5000, () => {   
+    console.log('Listening on port 5000')
 
 })
