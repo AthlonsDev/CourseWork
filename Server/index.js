@@ -20,7 +20,7 @@ app.get('/display', function(req, res) {
         if(err) {
             console.error(err)
         } else{
-            console.log(doc)
+            // console.log(doc)
             const myJSON = JSON.stringify(doc);
             res.json(doc)
         }
@@ -78,14 +78,14 @@ app.post('/updateplayer/:id', function(req, res) {
 
 app.post('/deleteplayer/:id',function(req, res) {
     let id = req.params.id;
-    console.log("Method called")
+    console.log("Deleting " + id)
         model.findByIdAndDelete(id,function (err, doc) {
             if (err){
                 console.log(err)
             }
             else{
                 // res.status(200)
-                res.send(doc.Player_Name + ' Deleted');
+                res.send('Payer Deleted');
             }
     }
 )
