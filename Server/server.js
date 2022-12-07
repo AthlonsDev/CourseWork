@@ -28,6 +28,7 @@ app.get('/display', function(req, res) {
 
 })
 
+// 1.5
 app.post('/addplayer', function(req, res) {
     
       console.log("req body", req.body)
@@ -43,21 +44,8 @@ app.post('/addplayer', function(req, res) {
         })
 })
 
-app.get('/getplayer/:id',function(req, res) {
-    var id = req.params.id;
-    model.findById(id, function(err, doc) {
-        if(err) 
-         console.error("Nothing Found" + err)
-
-         console.log("Document Found " + doc)
-         
-         res.json(doc)
-        //  res.status(200)
-
-    })
-});
    
-
+// 1.6
 app.post('/updateplayer/:id', function(req, res) {
         let id = req.params.id;
         let updatePlayer = new model(req.body)
@@ -76,6 +64,23 @@ app.post('/updateplayer/:id', function(req, res) {
         )
 })
 
+
+// 1.7
+app.get('/getplayer/:id',function(req, res) {
+    var id = req.params.id;
+    model.findById(id, function(err, doc) {
+        if(err) 
+         console.error("Nothing Found" + err)
+
+         console.log("Document Found " + doc)
+         
+         res.json(doc)
+        //  res.status(200)
+
+    })
+});
+
+// 1.8
 app.post('/deleteplayer/:id',function(req, res) {
     let id = req.params.id;
     console.log("Deleting " + id)
@@ -91,7 +96,34 @@ app.post('/deleteplayer/:id',function(req, res) {
 )
    
    });
-// Remind to start server command => npm start
+
+// 1.9 Untested on frontend
+app.get('/displaymatches/:Matches', function(req, res) {
+    let matches = req.params.Matches
+    model.find({
+        "Matches": { $gt: matches },
+      })
+    .limit(20)
+    .then(docs =>{
+        console.log(docs)
+        res.json(docs)
+    })
+})
+
+// 2.0 Untested on frontend
+app.get('/displayhs/:HS', function(req, res) {
+    let hs = req.params.HS
+    model.find({
+        "HS": { $gt: hs },
+      })
+    .limit(20)
+    .then(docs =>{
+        console.log(docs)
+        res.json(docs)
+    })
+})
+
+
 app.listen(5000, () => {   
     console.log('Listening on port 5000')
 
