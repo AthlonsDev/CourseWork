@@ -98,7 +98,7 @@ app.post('/deleteplayer/:id',function(req, res) {
    });
 
 // 1.9 Untested on frontend
-app.get('/displaymatches/:Matches', function(req, res) {
+app.get('/displaymatches/:matches', function(req, res) {
     let matches = req.params.Matches
     model.find({
         "Matches": { $gt: matches },
